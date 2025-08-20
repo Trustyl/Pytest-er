@@ -15,6 +15,7 @@ def client():
 
 
 def test_create_and_list_todo(client):
+
     assert client.get('/todos').get_json() == []
     resp = client.post('/todos', json={'title': 'Write tests'})
     assert resp.status_code == 201
@@ -23,16 +24,20 @@ def test_create_and_list_todo(client):
     assert client.get('/todos').get_json() == [todo]
 
 
+
 def test_update_todo(client):
     client.post('/todos', json={'title': 'Old title'})
+
     resp = client.put('/todos/1', json={'title': 'Updated title'})
     assert resp.status_code == 200
     assert resp.get_json()['title'] == 'Updated title'
     assert client.get('/todos').get_json()[0]['title'] == 'Updated title'
 
 
+
 def test_delete_todo(client):
     client.post('/todos', json={'title': 'Disposable'})
+
     resp = client.delete('/todos/1')
     assert resp.status_code == 204
     assert client.get('/todos').get_json() == []
@@ -79,3 +84,4 @@ def test_multi_item_interactions(client):
     assert client.get('/todos').get_json() == [{'id': a['id'], 'title': 'A1'}, b]
     client.delete(f"/todos/{b['id']}")
     assert client.get('/todos').get_json() == [{'id': a['id'], 'title': 'A1'}]
+

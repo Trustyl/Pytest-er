@@ -34,6 +34,7 @@ state does not leak between tests.
    - Assert the initial list is empty.
    - POST a todo and expect a structured JSON response with `id` and `title`.
    - Retrieve the list and confirm the new item appears.
+
 2. **Updating**
    - Create a todo then change its title via `PUT`.
    - Verify both the response and subsequent `GET` reflect the update.
@@ -54,18 +55,21 @@ state does not leak between tests.
      todo should retain its updated title, demonstrating operations are
      isolated.
 
+
 ## Why These Constructs?
 
 - **Factory Pattern** – Using a factory with a closure-scoped list and
   `nonlocal` counter provides simple state management while keeping tests
   isolated.
 - **pytest Fixtures** – Fixtures offer concise setup/teardown and make the
+
   test code easy to read.
 - **Flask `test_client`** – Simulates HTTP requests quickly, avoiding the
   overhead of running a real server.
 - **Parameterized Tests** – `pytest.mark.parametrize` exercises multiple
   malformed payloads with a single test function, increasing coverage while
   minimizing duplication.
+
 
 ## Running the Tests
 
