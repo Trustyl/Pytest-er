@@ -38,13 +38,23 @@ state does not leak between tests.
 2. **Updating**
    - Create a todo then change its title via `PUT`.
    - Verify both the response and subsequent `GET` reflect the update.
-
 3. **Deletion**
    - Create a todo and delete it.
    - Confirm the API returns `204` and the list is empty again.
+4. **Request Validation**
+   - Parameterized over `None`, an empty dict, and a dict missing `title` to
+     ensure malformed payloads return `400` and leave state unchanged.
+5. **Non‑existent IDs**
+   - Updating or deleting `999` yields `404` and does not disturb existing
+     todos.
+6. **ID Incrementation**
+   - Create a todo, delete it, then create another and check the new todo
+     receives the next sequential identifier.
+7. **Multi‑item Interactions**
+   - Create two todos, update the first, and delete the second. The remaining
+     todo should retain its updated title, demonstrating operations are
+     isolated.
 
-Each assertion documents intended behavior; failing tests would highlight
-regressions introduced by future changes.
 
 ## Why These Constructs?
 
@@ -52,9 +62,14 @@ regressions introduced by future changes.
   `nonlocal` counter provides simple state management while keeping tests
   isolated.
 - **pytest Fixtures** – Fixtures offer concise setup/teardown and make the
-test code easy to read.
+
+  test code easy to read.
 - **Flask `test_client`** – Simulates HTTP requests quickly, avoiding the
   overhead of running a real server.
+- **Parameterized Tests** – `pytest.mark.parametrize` exercises multiple
+  malformed payloads with a single test function, increasing coverage while
+  minimizing duplication.
+
 
 ## Running the Tests
 
